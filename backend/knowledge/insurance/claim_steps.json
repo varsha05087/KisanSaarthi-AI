@@ -1,0 +1,88 @@
+[
+  {
+    "id": "claim_process",
+    "topic": "General Claim Intimation and Assistance Process",
+    "keywords": [
+      "claim process",
+      "how to claim",
+      "apply for claim",
+      "file claim",
+      "claim steps",
+      "intimation",
+      "report damage",
+      "register claim",
+      "claim assistance",
+      "loss intimation",
+      "notify loss",
+      "claim procedure",
+      "క్లెయిమ్ ఎలా చేయాలి",
+      "నష్టాన్ని నమోదు చేయడం",
+      "క్లెయిమ్ విధానం",
+      "దావా నమోదు",
+      "दावा कैसे करें",
+      "क्लेम प्रक्रिया",
+      "नुकसान की सूचना",
+      "दावा दर्ज करें"
+    ],
+    "guidance": "Crop insurance assistance typically involves timely loss intimation, joint field survey, and assessment against scheme criteria. Specific intimation windows (e.g. 72 hours for localized natural calamities under certain schemes) and procedures can vary depending on whether the loss is localized, post-harvest, or seasonal.",
+    "information_to_collect": [
+      "Exact date, estimated time, and primary cause of crop damage",
+      "Insured crop name, variety, and approximate affected acreage",
+      "Village, Mandal/Tehsil, District, and Plot/Survey/Khasra number",
+      "Insurance policy number, application reference, or bank account number used for premium deduction"
+    ],
+    "useful_evidence": [
+      "Intimation reference / grievance docket number received from the official toll-free helpline or portal",
+      "Written intimation copy acknowledged with date and stamp by the local Agriculture Officer or bank branch",
+      "Joint field survey report copy signed during the official surveyor and agriculture officer field inspection"
+    ],
+    "general_next_steps": [
+      "Promptly notify the insurance company via official toll-free helpline, designated government portal, or the nearest Agriculture Extension Office",
+      "Carefully note down and preserve the official registration or complaint docket number provided",
+      "Be present and cooperate with the joint survey team (Agriculture department official + Insurer representative) during the field visit",
+      "Obtain an acknowledged copy or receipt of the field survey assessment sheet"
+    ]
+  },
+  {
+    "id": "safety_verification",
+    "topic": "Safety and Anti-Fraud Verification Guidance",
+    "keywords": [
+      "safety",
+      "fraud",
+      "scam",
+      "agent fee",
+      "fake surveyor",
+      "bribe",
+      "verification",
+      "official process",
+      "charge fee",
+      "commission",
+      "middleman",
+      "surveyor fee",
+      "మోసం",
+      "నకిలీ సర్వేయర్",
+      "లంచం",
+      "కమిషన్",
+      "धोखाधड़ी",
+      "फर्जी",
+      "दलाल",
+      "कमीशन",
+      "रिश्वत",
+      "सावधानी"
+    ],
+    "guidance": "Official crop insurance processes do not charge unauthorized processing fees or commissions for registering loss intimations or carrying out field surveys. Farmers should always verify surveyor credentials and avoid dealing with unauthorized intermediaries promising guaranteed payouts.",
+    "information_to_collect": [
+      "Full name, designation, and official organization of any visiting surveyor or loss assessor",
+      "Official identity card or district authorization letter displayed by the inspection team"
+    ],
+    "useful_evidence": [
+      "Official inspection sheet bearing the official logo, surveyor signature, and date",
+      "System-generated SMS confirmation from the official state or national crop insurance portal"
+    ],
+    "general_next_steps": [
+      "Never pay any fee, commission, or bribe to private individuals or intermediaries claiming to guarantee claim approval",
+      "Request to see the surveyor's official employee identity card or government deputation letter before granting field access",
+      "Submit all supporting papers solely through recognized channels such as your bank branch, Common Service Center (CSC), or official Agriculture Office"
+    ]
+  }
+]

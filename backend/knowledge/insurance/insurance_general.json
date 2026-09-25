@@ -1,0 +1,87 @@
+[
+  {
+    "id": "general_guidance",
+    "topic": "General Crop Insurance Assistance",
+    "keywords": [
+      "crop insurance",
+      "insurance help",
+      "how insurance works",
+      "insurance assistance",
+      "fasal bima",
+      "pmfby",
+      "crop cover",
+      "agricultural insurance",
+      "about insurance",
+      "insurance scheme",
+      "insurance information",
+      "పంట బీమా",
+      "బీమా సహాయం",
+      "బీమా ఎలా పనిచేస్తుంది",
+      "ఫసల్ బీమా",
+      "फसल बीमा",
+      "बीमा सहायता",
+      "बीमा योजना",
+      "फसल बीमा जानकारी"
+    ],
+    "guidance": "Crop insurance aims to provide financial support to farmers suffering crop loss or damage arising from non-preventable natural perils during the cultivation cycle. Applicable notified crops, sum insured, premium subsidies, and indemnity terms are determined by the relevant state government notification and scheme rules.",
+    "information_to_collect": [
+      "Cultivated crop name and whether the crop is notified under the current season's insurance scheme in your village/mandal",
+      "Current agricultural season (Kharif, Rabi, or Summer/Commercial)",
+      "Bank account / KCC loan details through which the insurance premium was debited or self-enrolment was made"
+    ],
+    "useful_evidence": [
+      "Bank passbook statement or premium debit SMS indicating the crop insurance deduction",
+      "Insurance cover note or receipt generated from the National Crop Insurance Portal or CSC centre"
+    ],
+    "general_next_steps": [
+      "Verify with your village agriculture officer or lending bank branch whether your crop acreage was formally enrolled before the seasonal cut-off date",
+      "Maintain a copy of the insurance policy certificate or application reference number",
+      "Familiarize yourself with the notification guidelines for your specific district and crop"
+    ]
+  },
+  {
+    "id": "no_guarantee_notice",
+    "topic": "Claim Approval and Guarantee Clarification",
+    "keywords": [
+      "guarantee",
+      "guaranteed",
+      "guarantee approval",
+      "guarantee claim",
+      "definitely",
+      "definitely approved",
+      "definitely get money",
+      "100% approval",
+      "will i get money",
+      "how much money will i get",
+      "promise claim",
+      "sure claim",
+      "can you approve",
+      "will you approve",
+      "guaranteed payout",
+      "గ్యారెంటీ",
+      "ఖచ్చితంగా వస్తుందా",
+      "డబ్బులు వస్తాయా",
+      "క్లెయిమ్ గ్యారెంటీ",
+      "गारंटी",
+      "पक्का मिलेगा",
+      "क्या दावा पास होगा",
+      "क्लेम गारंटी",
+      "मुआवजा पक्का मिलेगा"
+    ],
+    "guidance": "No digital application, agent, or third party can guarantee claim approval or predict an exact compensation payout. Crop insurance claim approval depends entirely on official joint field loss surveys, notified threshold yield calculations, weather station records, and formal adjudication by the designated insurance company in accordance with scheme rules.",
+    "information_to_collect": [
+      "Official intimation / grievance docket number for case tracking",
+      "Joint loss survey assessment sheet completed by the authorized inspection team",
+      "Official threshold yield benchmarks established for your notified insurance unit"
+    ],
+    "useful_evidence": [
+      "Copy of the signed Joint Field Inspection report",
+      "Status tracking screenshot from the official state or national crop insurance portal (e.g. pmfby.gov.in)"
+    ],
+    "general_next_steps": [
+      "Ensure loss intimation is formally registered with an official complaint / docket number within prescribed timelines",
+      "Attend the joint field survey conducted by the agriculture officer and insurance company surveyor",
+      "Track your claim status directly through official channels: your bank branch, local Agriculture Office, or the official portal"
+    ]
+  }
+]

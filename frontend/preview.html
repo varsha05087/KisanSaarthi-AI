@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>KisanSaarthi AI — Voice-First Farmer Assistant</title>
+  <meta name="theme-color" content="#2E7D32">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              50: '#E8F5E9',
+              100: '#C8E6C9',
+              500: '#4CAF50',
+              600: '#388E3C',
+              DEFAULT: '#2E7D32',
+              dark: '#1B5E20',
+            },
+            leaf: {
+              light: '#A5D6A7',
+              DEFAULT: '#66BB6A',
+              dark: '#43A047',
+            },
+            harvest: {
+              light: '#FFF9C4',
+              DEFAULT: '#F9A825',
+              dark: '#F57F17',
+            },
+            earth: {
+              bg: '#FAF8F2',
+              card: '#FFFFFF',
+              text: '#26332A',
+              muted: '#66736A',
+              border: '#E3E0D8',
+              subtle: '#F2EFE9',
+            },
+            danger: {
+              DEFAULT: '#D32F2F',
+              light: '#FFEBEE',
+            }
+          },
+          fontFamily: {
+            sans: ['Noto Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18 & Babel CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      background-color: #FAF8F2;
+      color: #26332A;
+      font-family: 'Noto Sans', 'Noto Sans Telugu', 'Noto Sans Devanagari', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @keyframes wave-pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.5); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(46, 125, 50, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
+    }
+    .animate-wave-pulse { animation: wave-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); }
+    
+    @keyframes record-pulse {
+      0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 20px rgba(211, 47, 47, 0); }
+      100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+    }
+    .animate-record-pulse { animation: record-pulse 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1); }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Translations Dictionary
+    const translations = {
+      te: {
+        appName: "కిసాన్ సారథి AI",
+        tagline: "మాట్లాడండి. చూపించండి. సహాయం పొందండి.",
+        greeting: "నమస్కారం",
+        howCanIHelp: "మీకు ఎలా సహాయం చేయాలి?",
+        chooseLanguage: "మీ అనుకూలమైన భాషను ఎంచుకోండి",
+        chooseLanguageSub: "మీరు మీ స్వంత భాషలో మాట్లాడవచ్చు, ఫోటో చూపించవచ్చు లేదా అడగవచ్చు",
+        continueBtn: "ముందుకు సాగండి (Continue) →",
+        talkTitle: "కిసాన్ సారథితో మాట్లాడండి",
+        talkSub: "మీ సమస్యను మీ భాషలో నేరుగా చెప్పండి",
+        tapToSpeak: "మాట్లాడటానికి నొక్కండి",
+        speakNumber: "మొబైల్ నంబర్ చెప్పండి",
+        listening: "వింటున్నాను... ఇప్పుడు మాట్లాడండి",
+        processing: "మీ మాటలను అర్థం చేసుకుంటున్నాను...",
+        showProblem: "మీ సమస్యను చూపించండి",
+        showSub: "మీ పంట లేదా సమస్య యొక్క ఫోటో తీయండి",
+        quickTitle: "మీ పొలం కోసం తక్షణ సేవలు",
+        fourServices: "4 సేవలు",
+        voiceLanguages: "తెలుగు • हिन्दी • English",
+        crop: "పంట సమస్య",
+        cropDesc: "ఆకు మచ్చలు, తెగుళ్ళు, పురుగులు",
+        tractor: "ట్రాక్టర్ బుకింగ్",
+        tractorDesc: "దుక్కి దున్నడం, కోత, రవాణా",
+        seeds: "విత్తనాల అభ్యర్థన",
+        seedsDesc: "ధృవీకరించిన విత్తనాలు & లభ్యత",
+        insurance: "పంట భీమా",
+        insuranceDesc: "PMFBY సహాయం & నష్ట నివేదిక",
+        homeNav: "హోమ్",
+        reqNav: "నా అభ్యర్థనలు",
+        meNav: "నా వివరాలు",
+        recentRequests: "తాజా అభ్యర్థనలు",
+        viewAll: "అన్నీ చూడండి →",
+        noRequests: "ఇంకా అభ్యర్థనలు లేవు. ట్రాక్టర్ బుక్ చేయడానికి పైనున్న కార్డ్ నొక్కండి.",
+        noRequestsAccount: "ఈ రైతు ఖాతాకు ఇంకా అభ్యర్థనలు లేవు.",
+        bookTractorBtn: "🚜 ట్రాక్టర్ బుక్ చేయండి",
+        bookBtnShort: "+ బుక్ చేయండి",
+        farmerLabel: "రైతు",
+        change: "మార్చండి",
+        changeFarmerSub: "వేరే రైతు లాగిన్ చేయడానికి",
+        online: "ఆన్‌లైన్",
+        offline: "ఆఫ్‌లైన్",
+        offlineMsg: "ఇంటర్నెట్ అందుబాటులో లేదు. మీ అభ్యర్థన సురక్షితంగా సేవ్ అవుతుంది.",
+        changeLang: "భాష మార్చండి",
+        confirmPhoto: "విశ్లేషణ కోసం మీరు ఈ ఫోటోను పంపాలనుకుంటున్నారా?",
+        sendPhoto: "ఫోటో పంపండి",
+        retake: "మరో ఫోటో",
+        analyzing: "మీ ఫోటోను పరిశీలిస్తున్నాము...",
+        cancel: "రద్దు చేయండి",
+        cancelBtn: "రద్దు",
+        doneBtn: "పూర్తయింది",
+        takePhoto: "కెమెరా తెరవండి",
+        fromGallery: "గ్యాలరీ నుండి ఎంచుకోండి",
+        back: "వెనుకకు",
+        confirm: "నిర్ధారించండి",
+        verifiedVoice: "ధృవీకరించిన వాయిస్ గుర్తింపు",
+        understandingMsg: "మీ మాటలను కిసాన్ సారథి అర్థం చేసుకుంటోంది...",
+        tractorBookedMsg: "ట్రాక్టర్ బుక్ అయింది! 'నా అభ్యర్థనలు' లో చూడండి.",
+        // Identity
+        identityTitle: "రైతు గుర్తింపు",
+        askName: "మీ పేరు చెప్పండి",
+        nameHelper: "మైక్ నొక్కి మీ పేరు మాట్లాడండి",
+        nameRecognized: "మీ పేరు:",
+        askPhone: "మీ ఫోన్ నంబర్ చెప్పండి",
+        phoneHelper: "ఉదాహరణ: 98765 43210",
+        phoneConfirm: "ఇది సరైన నంబరేనా?",
+        yesConfirm: "అవును",
+        sayAgain: "మళ్ళీ చెప్పండి",
+        typeManually: "టైప్ చేయండి",
+        enterNameManual: "మీ పేరు రాయండి",
+        enterPhoneManual: "10 అంకెల మొబైల్ నంబర్",
+        continueWithPhone: "ఈ ఫోన్తో కొనసాగండి",
+        changeFarmer: "రైతును మార్చండి",
+        changeFarmerTitle: "రైతు మార్పిడి",
+        changeFarmerConfirm: "ఈ పరికరంలో వేరే రైతు లాగిన్ అవ్వాలనుకుంటున్నారా? మునుపటి రికార్డులు భద్రంగా ఉంటాయి.",
+        changeFarmerBtn: "మార్చండి",
+      },
+      hi: {
+        appName: "किसान सारथी AI",
+        tagline: "बोलिए। दिखाइए। मदद पाइए।",
+        greeting: "नमस्ते",
+        howCanIHelp: "मैं आज आपकी क्या सहायता करूँ?",
+        chooseLanguage: "अपनी पसंदीदा भाषा चुनें",
+        chooseLanguageSub: "आप अपनी भाषा में बोल सकते हैं, फ़ोटो दिखा सकते हैं या पूछ सकते हैं",
+        continueBtn: "आगे बढ़ें (Continue) →",
+        talkTitle: "किसान सारथी से बात करें",
+        talkSub: "अपनी समस्या अपनी भाषा में सीधे बोलकर बताएं",
+        tapToSpeak: "बोलने के लिए दबाएं",
+        speakNumber: "मोबाइल नंबर बोलिए",
+        listening: "सुन रहा हूँ... कृपया बोलिए",
+        processing: "आपकी बात समझ रहा हूँ...",
+        showProblem: "अपनी समस्या दिखाइए",
+        showSub: "अपनी फसल या समस्या का फ़ोटो खींचें या अपलोड करें",
+        quickTitle: "आपके खेत के लिए त्वरित सेवाएँ",
+        fourServices: "4 सेवाएँ",
+        voiceLanguages: "हिन्दी • తెలుగు • English",
+        crop: "फसल समस्या",
+        cropDesc: "पत्तियों के धब्बे, कीड़े व रोग",
+        tractor: "ट्रैक्टर बुकिंग",
+        tractorDesc: "जुताई, कटाई, ढुलाई हेतु",
+        seeds: "बीज अनुरोध",
+        seedsDesc: "प्रमाणित बीज व उपलब्धता",
+        insurance: "फसल बीमा",
+        insuranceDesc: "PMFBY सहायता व नुकसान क्लेम",
+        homeNav: "होम",
+        reqNav: "मेरे अनुरोध",
+        meNav: "मेरी प्रोफ़ाइल",
+        recentRequests: "हाल के अनुरोध",
+        viewAll: "सभी देखें →",
+        noRequests: "अभी कोई अनुरोध नहीं है। सेवा शुरू करने के लिए ऊपर कार्ड पर दबाएं।",
+        noRequestsAccount: "इस किसान खाते में अभी कोई अनुरोध नहीं है।",
+        bookTractorBtn: "🚜 ट्रैक्टर बुक करें",
+        bookBtnShort: "+ बुक करें",
+        farmerLabel: "किसान",
+        change: "बदलें",
+        changeFarmerSub: "दूसरे किसान का लॉगिन करने के लिए",
+        online: "ऑनलाइन",
+        offline: "ऑफ़लाइन",
+        offlineMsg: "इंटरनेट उपलब्ध नहीं है। आपका अनुरोध सुरक्षित रूप से सेव हो जाएगा।",
+        changeLang: "भाषा बदलें",
+        confirmPhoto: "क्या आप जांच के लिए यह फ़ोटो भेजना चाहते हैं?",
+        sendPhoto: "फ़ोटो भेजें",
+        retake: "दूसरा फ़ोटो",
+        analyzing: "आपके फ़ोटो की जांच हो रही है...",
+        cancel: "रद्द करें",
+        cancelBtn: "रद्द करें",
+        doneBtn: "हो गया",
+        takePhoto: "कैमरा खोलें",
+        fromGallery: "गैलरी से चुनें",
+        back: "वापस",
+        confirm: "पुष्टि करें",
+        verifiedVoice: "सत्यापित आवाज़ पहचान",
+        understandingMsg: "किसान सारथी आपकी बात समझ रहा है...",
+        tractorBookedMsg: "ट्रैक्टर बुक हो गया! 'मेरे अनुरोध' में देखें।",
+        // Identity
+        identityTitle: "किसान पहचान",
+        askName: "अपना नाम बताइए",
+        nameHelper: "माइक दबाकर अपना नाम बोलें",
+        nameRecognized: "आपका नाम:",
+        askPhone: "अपना फ़ोन नंबर बताइए",
+        phoneHelper: "उदाहरण: 98765 43210",
+        phoneConfirm: "क्या यह सही नंबर है?",
+        yesConfirm: "हाँ, सही है",
+        sayAgain: "फिर से बोलें",
+        typeManually: "टाइप करें",
+        enterNameManual: "अपना नाम टाइप करें",
+        enterPhoneManual: "10 अंकों का मोबाइल नंबर",
+        continueWithPhone: "इस फ़ोन के साथ जारी रखें",
+        changeFarmer: "किसान बदलें",
+        changeFarmerTitle: "किसान बदलाव",
+        changeFarmerConfirm: "क्या आप इस डिवाइस पर दूसरा किसान बदलना चाहते हैं? पुराना डेटा सुरक्षित रहेगा।",
+        changeFarmerBtn: "बदलें",
+      },
+      en: {
+        appName: "KisanSaarthi AI",
+        tagline: "Talk. Show. Get help.",
+        greeting: "Hello",
+        howCanIHelp: "How can I help you today?",
+        chooseLanguage: "Choose your preferred language",
+        chooseLanguageSub: "You can talk, show photos, or ask in your own language",
+        continueBtn: "Continue →",
+        talkTitle: "Talk to KisanSaarthi",
+        talkSub: "Say your problem naturally in your language",
+        tapToSpeak: "Tap to speak",
+        speakNumber: "Speak phone number",
+        listening: "Listening... Please speak now",
+        processing: "Understanding your voice...",
+        showProblem: "Show your problem",
+        showSub: "Take or upload a photo of your crop or farm problem",
+        quickTitle: "Quick Help for Your Farm",
+        fourServices: "4 Services",
+        voiceLanguages: "English • हिन्दी • తెలుగు",
+        crop: "Crop Problem",
+        cropDesc: "Leaf spots, pests, diseases",
+        tractor: "Tractor Booking",
+        tractorDesc: "Ploughing, harvesting, transport",
+        seeds: "Seeds & Inputs",
+        seedsDesc: "Certified seeds & availability",
+        insurance: "Crop Insurance",
+        insuranceDesc: "PMFBY help & damage claim prep",
+        homeNav: "Home",
+        reqNav: "My Requests",
+        meNav: "Me",
+        recentRequests: "Recent Requests",
+        viewAll: "View All →",
+        noRequests: "No requests yet. Tap a card above to make a request.",
+        noRequestsAccount: "No requests for this farmer account yet.",
+        bookTractorBtn: "🚜 Book a Tractor",
+        bookBtnShort: "+ Book Now",
+        farmerLabel: "Farmer",
+        change: "Change",
+        changeFarmerSub: "Switch to another farmer account",
+        online: "Online",
+        offline: "Offline",
+        offlineMsg: "Internet unavailable. Your request is safely saved offline.",
+        changeLang: "Change Language",
+        confirmPhoto: "Is this the photo you want to send for analysis?",
+        sendPhoto: "Send Photo",
+        retake: "Retake Photo",
+        analyzing: "Analyzing your photo...",
+        cancel: "Cancel",
+        cancelBtn: "Cancel",
+        doneBtn: "Done",
+        takePhoto: "Open Camera",
+        fromGallery: "Choose from Gallery",
+        back: "Back",
+        confirm: "Confirm",
+        verifiedVoice: "Verified Voice Identity",
+        understandingMsg: "KisanSaarthi is analyzing your request...",
+        tractorBookedMsg: "Tractor booked! View in 'My Requests'.",
+        // Identity
+        identityTitle: "Farmer Identity",
+        askName: "Please tell me your name",
+        nameHelper: "Tap the mic and speak your name",
+        nameRecognized: "Your name:",
+        askPhone: "Please tell me your phone number",
+        phoneHelper: "Example: 98765 43210",
+        phoneConfirm: "Is this the correct number?",
+        yesConfirm: "Yes, correct",
+        sayAgain: "Say again",
+        typeManually: "Type manually",
+        enterNameManual: "Type your name",
+        enterPhoneManual: "10-digit mobile number",
+        continueWithPhone: "Continue with this phone",
+        changeFarmer: "Change Farmer",
+        changeFarmerTitle: "Change Farmer",
+        changeFarmerConfirm: "Do you want to change the active farmer on this device? Previous records will remain safe.",
+        changeFarmerBtn: "Change",
+      }
+    };
+
+    const languages = [
+      { code: 'te', native: 'తెలుగు', eng: 'Telugu', flag: '🌾', greeting: 'మీకు ఎలా సహాయం చేయాలి?' },
+      { code: 'hi', native: 'हिन्दी', eng: 'Hindi', flag: '🌻', greeting: 'मैं आपकी क्या सहायता करूँ?' },
+      { code: 'en', native: 'English', eng: 'English', flag: '🌱', greeting: 'How can I help you today?' },
+    ];
+
+    function formatPhone(p) {
+      if (!p) return '';
+      const c = p.toString().replace(/\D/g, '');
+      return c.length === 10 ? `${c.slice(0, 5)} ${c.slice(5)}` : c;
+    }
+
+    function App() {
+      const [lang, setLang] = useState(() => {
+        try {
+          const s = localStorage.getItem('kisansaarthi_lang');
+          if (s && ['te', 'hi', 'en'].includes(s)) return s;
+          const nav = navigator.language || '';
+          if (nav.startsWith('hi')) return 'hi';
+        } catch {}
+        return 'te';
+      });
+
+      const [currentFarmer, setCurrentFarmer] = useState(() => {
+        try {
+          const s = localStorage.getItem('kisansaarthi_current_farmer');
+          return s ? JSON.parse(s) : null;
+        } catch { return null; }
+      });
+
+      // Onboarding Voice Identity states
+      const [onboardStep, setOnboardStep] = useState(1); // 1: Lang, 2: Name, 3: Phone
+      const [spokenName, setSpokenName] = useState('');
+      const [manualName, setManualName] = useState('');
+      const [isManualName, setIsManualName] = useState(false);
+      const [spokenPhone, setSpokenPhone] = useState('');
+      const [manualPhone, setManualPhone] = useState('');
+      const [isManualPhone, setIsManualPhone] = useState(false);
+
+      // Main UI states
+      const [activeTab, setActiveTab] = useState('home');
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+      const [voiceState, setVoiceState] = useState('idle');
+      const [recognizedText, setRecognizedText] = useState('');
+      const [previewImage, setPreviewImage] = useState(null);
+      const [isAnalyzing, setIsAnalyzing] = useState(false);
+      const [showUploadOptions, setShowUploadOptions] = useState(false);
+      const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+      // User-specific requests store in localStorage - starts EMPTY
+      const [farmerRequests, setFarmerRequests] = useState([]);
+
+      const fileInputRef = useRef(null);
+      const cameraInputRef = useRef(null);
+
+      const t = translations[lang] || translations.en;
+
+      const changeLanguage = (newLang) => {
+        setLang(newLang);
+        try {
+          localStorage.setItem('kisansaarthi_lang', newLang);
+          if (currentFarmer) {
+            const updated = { ...currentFarmer, language: newLang };
+            setCurrentFarmer(updated);
+            localStorage.setItem('kisansaarthi_current_farmer', JSON.stringify(updated));
+          }
+        } catch {}
+      };
+
+      // Load user requests (strictly for this farmer, NO DEMO DATA)
+      useEffect(() => {
+        if (!currentFarmer) {
+          setFarmerRequests([]);
+          return;
+        }
+        try {
+          const raw = localStorage.getItem('kisansaarthi_all_requests');
+          const all = raw ? JSON.parse(raw) : [];
+          // Purge any legacy fake/demo requests
+          const cleanAll = all.filter(r => !['TRK-8921', 'DIA-4819', 'REQ-101', 'REQ-102'].includes(r.id));
+          if (cleanAll.length !== all.length) {
+            localStorage.setItem('kisansaarthi_all_requests', JSON.stringify(cleanAll));
+          }
+          const mine = cleanAll.filter(r => r.farmerId === currentFarmer.id);
+          setFarmerRequests(mine);
+        } catch {
+          setFarmerRequests([]);
+        }
+      }, [currentFarmer]);
+
+      useEffect(() => {
+        const onOn = () => setIsOnline(true);
+        const onOff = () => setIsOnline(false);
+        window.addEventListener('online', onOn);
+        window.addEventListener('offline', onOff);
+        return () => {
+          window.removeEventListener('online', onOn);
+          window.removeEventListener('offline', onOff);
+        };
+      }, []);
+
+      const speak = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
+          window.speechSynthesis.speak(u);
+        }
+      };
+
+      // General speech recognition helper
+      const startListening = (onResult) => {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec) {
+          alert('Speech Recognition is best supported in Google Chrome.');
+          return;
+        }
+        const recognizer = new SpeechRec();
+        recognizer.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
+        recognizer.interimResults = false;
+        recognizer.onresult = (e) => {
+          const text = e.results[0][0].transcript;
+          onResult(text);
+        };
+        recognizer.start();
+      };
+
+      // Identity step handlers
+      const handleSaveFarmer = (name, phone) => {
+        const defaultName = lang === 'hi' ? 'रामू' : lang === 'te' ? 'రాము' : 'Ramu';
+        const profile = {
+          id: `farmer_${Math.floor(100 + Math.random() * 900)}`,
+          name: name || defaultName,
+          phone: phone || '9876543210',
+          language: lang,
+        };
+        localStorage.setItem('kisansaarthi_current_farmer', JSON.stringify(profile));
+        setCurrentFarmer(profile);
+      };
+
+      const handleQuickPhoneLogin = () => {
+        const defaultName = lang === 'hi' ? 'किसान भाई' : lang === 'te' ? 'రైతు మిత్రుడు' : 'Farmer Friend';
+        handleSaveFarmer(defaultName, '9876543210');
+      };
+
+      const handleLogout = () => {
+        setShowLogoutConfirm(false);
+        localStorage.removeItem('kisansaarthi_current_farmer');
+        setCurrentFarmer(null);
+        setOnboardStep(1);
+        setSpokenName('');
+        setSpokenPhone('');
+      };
+
+      const handleBookTractor = (model = 'Mahindra 575 DI (45 HP)') => {
+        if (!currentFarmer) return;
+        const localizedTitle = lang === 'hi'
+          ? `🚜 जुताई के लिए ट्रैक्टर (${model})`
+          : lang === 'te'
+          ? `🚜 దుక్కి దున్నడానికి ట్రాక్టర్ (${model})`
+          : `🚜 Tractor for Ploughing (${model})`;
+
+        const localizedStatus = lang === 'hi'
+          ? 'कन्फर्म'
+          : lang === 'te'
+          ? 'నిర్ధారించబడింది'
+          : 'Confirmed';
+
+        const newReq = {
+          id: `TRK-${Math.floor(1000 + Math.random() * 9000)}`,
+          farmerId: currentFarmer.id,
+          farmerName: currentFarmer.name,
+          farmerPhone: currentFarmer.phone,
+          type: 'tractor',
+          title: localizedTitle,
+          date: lang === 'hi' ? 'अभी-अभी' : lang === 'te' ? 'ఇప్పుడే' : 'Just now',
+          status: localizedStatus,
+          color: 'bg-emerald-100 text-emerald-800 border-emerald-300'
+        };
+
+        const all = JSON.parse(localStorage.getItem('kisansaarthi_all_requests') || '[]')
+          .filter(r => !['TRK-8921', 'DIA-4819', 'REQ-101', 'REQ-102'].includes(r.id));
+        all.unshift(newReq);
+        localStorage.setItem('kisansaarthi_all_requests', JSON.stringify(all));
+        setFarmerRequests([newReq, ...farmerRequests]);
+      };
+
+      const handleRequestSeed = () => {
+        if (!currentFarmer) return;
+        const title = lang === 'hi'
+          ? '🌾 प्रमाणित धान बीज अनुरोध (MTU 1010)'
+          : lang === 'te'
+          ? '🌾 ధృవీకరించిన వరి విత్తనాలు (MTU 1010)'
+          : '🌾 Certified Paddy Seeds Request (MTU 1010)';
+        const newReq = {
+          id: `SED-${Math.floor(1000 + Math.random() * 9000)}`,
+          farmerId: currentFarmer.id,
+          farmerName: currentFarmer.name,
+          farmerPhone: currentFarmer.phone,
+          type: 'seeds',
+          title: title,
+          date: lang === 'hi' ? 'अभी-अभी' : lang === 'te' ? 'ఇప్పుడే' : 'Just now',
+          status: lang === 'hi' ? 'प्रक्रिया में' : lang === 'te' ? 'పరిశీలనలో' : 'In Review',
+          color: 'bg-lime-100 text-lime-800 border-lime-300'
+        };
+        const all = JSON.parse(localStorage.getItem('kisansaarthi_all_requests') || '[]')
+          .filter(r => !['TRK-8921', 'DIA-4819', 'REQ-101', 'REQ-102'].includes(r.id));
+        all.unshift(newReq);
+        localStorage.setItem('kisansaarthi_all_requests', JSON.stringify(all));
+        setFarmerRequests([newReq, ...farmerRequests]);
+        alert(lang === 'hi' ? 'बीज अनुरोध सबमिट हो गया! "मेरे अनुरोध" में देखें।' : lang === 'te' ? 'విత్తనాల అభ్యర్థన సమర్పించబడింది! "నా అభ్యర్థనలు" లో చూడండి.' : 'Seed request submitted! View in "My Requests".');
+      };
+
+      const handleInsuranceClaim = () => {
+        if (!currentFarmer) return;
+        const title = lang === 'hi'
+          ? '🛡️ PMFBY फसल क्षति दावा अनुरोध'
+          : lang === 'te'
+          ? '🛡️ PMFBY పంట నష్ట భీమా దావా'
+          : '🛡️ PMFBY Crop Damage Insurance Claim';
+        const newReq = {
+          id: `INS-${Math.floor(1000 + Math.random() * 9000)}`,
+          farmerId: currentFarmer.id,
+          farmerName: currentFarmer.name,
+          farmerPhone: currentFarmer.phone,
+          type: 'insurance',
+          title: title,
+          date: lang === 'hi' ? 'अभी-अभी' : lang === 'te' ? 'ఇప్పుడే' : 'Just now',
+          status: lang === 'hi' ? 'ड्राफ्ट तैयार' : lang === 'te' ? 'పత్రాలు సిద్ధం' : 'Draft Ready',
+          color: 'bg-blue-100 text-blue-800 border-blue-300'
+        };
+        const all = JSON.parse(localStorage.getItem('kisansaarthi_all_requests') || '[]')
+          .filter(r => !['TRK-8921', 'DIA-4819', 'REQ-101', 'REQ-102'].includes(r.id));
+        all.unshift(newReq);
+        localStorage.setItem('kisansaarthi_all_requests', JSON.stringify(all));
+        setFarmerRequests([newReq, ...farmerRequests]);
+        alert(lang === 'hi' ? 'फसल बीमा दावा ड्राफ्ट तैयार हो गया! "मेरे अनुरोध" में देखें।' : lang === 'te' ? 'పంట భీమా దావా పత్రం సిద్ధమైంది! "నా అభ్యర్థనలు" లో చూడండి.' : 'Insurance claim draft prepared! View in "My Requests".');
+      };
+
+      const handlePhotoDiagnose = () => {
+        if (!currentFarmer) return;
+        const title = lang === 'hi'
+          ? '🌱 धान की पत्ती रोग निदान'
+          : lang === 'te'
+          ? '🌱 వరి ఆకు మచ్చల విశ్లేషణ'
+          : '🌱 Paddy Leaf Disease Diagnosis';
+        const newReq = {
+          id: `CRP-${Math.floor(1000 + Math.random() * 9000)}`,
+          farmerId: currentFarmer.id,
+          farmerName: currentFarmer.name,
+          farmerPhone: currentFarmer.phone,
+          type: 'crop',
+          title: title,
+          date: lang === 'hi' ? 'अभी-अभी' : lang === 'te' ? 'ఇప్పుడే' : 'Just now',
+          status: lang === 'hi' ? 'जांच पूरी' : lang === 'te' ? 'పరిశీలన పూర్తి' : 'Completed',
+          color: 'bg-emerald-100 text-emerald-800 border-emerald-300'
+        };
+        const all = JSON.parse(localStorage.getItem('kisansaarthi_all_requests') || '[]')
+          .filter(r => !['TRK-8921', 'DIA-4819', 'REQ-101', 'REQ-102'].includes(r.id));
+        all.unshift(newReq);
+        localStorage.setItem('kisansaarthi_all_requests', JSON.stringify(all));
+        setFarmerRequests([newReq, ...farmerRequests]);
+        setShowUploadOptions(false);
+        setPreviewImage(null);
+        alert(lang === 'hi' ? 'फोटो का विश्लेषण पूरा हो गया! "मेरे अनुरोध" में देखें।' : lang === 'te' ? 'ఫోటో విశ్లేషణ పూర్తయింది! "నా అభ్యర్థనలు" లో చూడండి.' : 'Photo diagnosis completed! View in "My Requests".');
+      };
+
+      // ================= VOICE IDENTITY ONBOARDING SCREEN =================
+      if (!currentFarmer) {
+        return (
+          <div className="min-h-screen bg-[#FAF8F2] flex flex-col justify-between p-5 max-w-lg mx-auto select-none">
+            {/* Top Brand */}
+            <div className="pt-4 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-[#2E7D32] mx-auto flex items-center justify-center text-3xl shadow-xl shadow-green-900/20 mb-2">
+                🌱
+              </div>
+              <span className="inline-block text-xs font-bold text-[#2E7D32] bg-green-50 px-3 py-0.5 rounded-full border border-green-200">
+                ✨ {t.identityTitle}
+              </span>
+              {/* Steps Dots */}
+              <div className="flex justify-center gap-1.5 mt-2">
+                <span className={`h-1.5 rounded-full ${onboardStep === 1 ? 'w-6 bg-[#2E7D32]' : 'w-2 bg-gray-300'}`}></span>
+                <span className={`h-1.5 rounded-full ${onboardStep === 2 ? 'w-6 bg-[#2E7D32]' : 'w-2 bg-gray-300'}`}></span>
+                <span className={`h-1.5 rounded-full ${onboardStep === 3 ? 'w-6 bg-[#2E7D32]' : 'w-2 bg-gray-300'}`}></span>
+              </div>
+            </div>
+
+            {/* STEP 1: LANGUAGE */}
+            {onboardStep === 1 && (
+              <div className="my-6 space-y-4">
+                <div className="text-center">
+                  <h2 className="text-2xl font-black text-[#26332A]">{t.chooseLanguage}</h2>
+                  <p className="text-xs text-[#66736A] mt-1">{t.chooseLanguageSub}</p>
+                </div>
+
+                <div className="space-y-3">
+                  {languages.map((l) => (
+                    <div
+                      key={l.code}
+                      onClick={() => { changeLanguage(l.code); speak(l.greeting); }}
+                      className={`p-4 rounded-2xl border-2 cursor-pointer flex items-center justify-between transition-all ${
+                        lang === l.code ? 'border-[#2E7D32] bg-white shadow-md ring-2 ring-[#2E7D32]/20' : 'border-[#E3E0D8] bg-white/80'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{l.flag}</span>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-bold text-[#26332A]">{l.native}</span>
+                            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{l.eng}</span>
+                          </div>
+                          <p className="text-xs text-[#2E7D32] font-medium">"{l.greeting}"</p>
+                        </div>
+                      </div>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${lang === l.code ? 'border-[#2E7D32] bg-[#2E7D32] text-white' : 'border-gray-300'}`}>
+                        {lang === l.code && '✓'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => { setOnboardStep(2); speak(t.askName); }}
+                  className="w-full py-4 rounded-2xl bg-[#2E7D32] hover:bg-green-800 text-white font-bold text-base shadow-lg active:scale-95 transition-all mt-2"
+                >
+                  {t.continueBtn}
+                </button>
+              </div>
+            )}
+
+            {/* STEP 2: VOICE NAME */}
+            {onboardStep === 2 && (
+              <div className="my-6 space-y-5 text-center">
+                <div>
+                  <span className="text-xs font-bold text-[#2E7D32] bg-green-50 px-3 py-1 rounded-full">1 / 2 {t.identityTitle}</span>
+                  <h2 className="text-2xl font-black text-[#26332A] mt-2">{t.askName}</h2>
+                  <p className="text-xs text-[#66736A] mt-1">{t.nameHelper}</p>
+                </div>
+
+                {!spokenName && !isManualName && (
+                  <div className="py-4">
+                    <button
+                      onClick={() => startListening((text) => setSpokenName(text.trim()))}
+                      className="w-24 h-24 rounded-full bg-[#2E7D32] text-white text-4xl mx-auto flex items-center justify-center shadow-xl animate-wave-pulse active:scale-95"
+                    >
+                      🎤
+                    </button>
+                    <p className="text-xs font-bold text-[#2E7D32] mt-3">{t.tapToSpeak}</p>
+                  </div>
+                )}
+
+                {spokenName && !isManualName && (
+                  <div className="p-5 rounded-3xl bg-white border-2 border-[#2E7D32] shadow-lg space-y-3">
+                    <span className="text-xs font-bold text-[#2E7D32]">{t.nameRecognized}</span>
+                    <div className="text-3xl font-black text-[#26332A]">"{spokenName}"</div>
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <button onClick={() => setSpokenName('')} className="py-3 rounded-xl border border-gray-300 font-bold text-xs">
+                        🔄 {t.sayAgain}
+                      </button>
+                      <button onClick={() => { setOnboardStep(3); speak(t.askPhone); }} className="py-3 rounded-xl bg-[#2E7D32] text-white font-bold text-xs shadow-md">
+                        ✅ {t.yesConfirm}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {isManualName && (
+                  <div className="p-5 rounded-3xl bg-white border border-[#E3E0D8] space-y-3">
+                    <input
+                      type="text"
+                      value={manualName}
+                      onChange={(e) => setManualName(e.target.value)}
+                      placeholder={t.enterNameManual}
+                      className="w-full p-3.5 rounded-xl border text-center text-lg font-bold"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <button onClick={() => setIsManualName(false)} className="py-2.5 rounded-xl border text-xs font-bold">{t.back}</button>
+                      <button
+                        onClick={() => { setSpokenName(manualName || (lang === 'hi' ? 'रामू' : lang === 'te' ? 'రాము' : 'Ramu')); setOnboardStep(3); speak(t.askPhone); }}
+                        className="py-2.5 rounded-xl bg-[#2E7D32] text-white text-xs font-bold"
+                      >
+                        {t.confirm}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {!spokenName && !isManualName && (
+                  <button onClick={() => setIsManualName(true)} className="text-xs text-[#66736A] underline font-semibold">
+                    ⌨️ {t.typeManually}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* STEP 3: VOICE PHONE */}
+            {onboardStep === 3 && (
+              <div className="my-6 space-y-5 text-center">
+                <div>
+                  <span className="text-xs font-bold text-[#2E7D32] bg-green-50 px-3 py-1 rounded-full">2 / 2 {t.identityTitle}</span>
+                  <h2 className="text-2xl font-black text-[#26332A] mt-2">{t.askPhone}</h2>
+                  <p className="text-xs text-[#66736A] mt-1">{t.phoneHelper}</p>
+                </div>
+
+                {!spokenPhone && !isManualPhone && (
+                  <div className="py-4">
+                    <button
+                      onClick={() => startListening((text) => setSpokenPhone(text.replace(/\D/g, '').slice(0, 10) || '9876543210'))}
+                      className="w-24 h-24 rounded-full bg-[#2E7D32] text-white text-4xl mx-auto flex items-center justify-center shadow-xl animate-wave-pulse active:scale-95"
+                    >
+                      🎤
+                    </button>
+                    <p className="text-xs font-bold text-[#2E7D32] mt-3">{t.speakNumber}</p>
+                  </div>
+                )}
+
+                {spokenPhone && !isManualPhone && (
+                  <div className="p-5 rounded-3xl bg-white border-2 border-[#2E7D32] shadow-lg space-y-3">
+                    <span className="text-xs font-bold text-[#2E7D32]">{t.phoneConfirm}</span>
+                    <div className="text-3xl font-black font-mono tracking-widest text-[#26332A]">
+                      {formatPhone(spokenPhone)}
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <button onClick={() => setSpokenPhone('')} className="py-3 rounded-xl border border-gray-300 font-bold text-xs">
+                        🔄 {t.sayAgain}
+                      </button>
+                      <button onClick={() => handleSaveFarmer(spokenName, spokenPhone)} className="py-3 rounded-xl bg-[#2E7D32] text-white font-bold text-xs shadow-md">
+                        ✅ {t.yesConfirm}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {isManualPhone && (
+                  <div className="p-5 rounded-3xl bg-white border border-[#E3E0D8] space-y-3">
+                    <input
+                      type="tel"
+                      maxLength={10}
+                      value={manualPhone}
+                      onChange={(e) => setManualPhone(e.target.value.replace(/\D/g, ''))}
+                      placeholder={t.enterPhoneManual}
+                      className="w-full p-3.5 rounded-xl border text-center text-xl font-mono font-bold"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <button onClick={() => setIsManualPhone(false)} className="py-2.5 rounded-xl border text-xs font-bold">{t.back}</button>
+                      <button
+                        onClick={() => handleSaveFarmer(spokenName, manualPhone || '9876543210')}
+                        className="py-2.5 rounded-xl bg-[#2E7D32] text-white text-xs font-bold"
+                      >
+                        {t.confirm}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {!spokenPhone && !isManualPhone && (
+                  <button onClick={() => setIsManualPhone(true)} className="text-xs text-[#66736A] underline font-semibold">
+                    ⌨️ {t.typeManually}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Quick Skip Button */}
+            <div className="pb-4 text-center">
+              <button
+                onClick={handleQuickPhoneLogin}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-[#2E7D32] bg-green-50 hover:bg-green-100"
+              >
+                📱 {t.continueWithPhone}
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // ================= MAIN AUTHENTICATED APP =================
+      return (
+        <div className="min-h-screen bg-[#FAF8F2] flex flex-col justify-between">
+          <div className="w-full max-w-lg mx-auto min-h-screen bg-[#FAF8F2] shadow-2xl relative flex flex-col border-x border-[#E3E0D8]/60">
+            
+            {/* Header */}
+            <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#E3E0D8] px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-[#2E7D32] flex items-center justify-center text-2xl text-white shadow-md shadow-green-900/20">
+                  🌱
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-[#26332A] leading-none">
+                    {t.appName}
+                  </h1>
+                  <p className="text-xs text-[#66736A] font-medium mt-0.5">{t.tagline}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${isOnline ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-300'}`}>
+                  {isOnline ? '🟢 ' + t.online : '🟠 ' + t.offline}
+                </span>
+
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-3 py-1.5 rounded-xl bg-green-50 text-[#2E7D32] border border-green-200 text-xs font-bold active:scale-95"
+                >
+                  🌐 {languages.find(l => l.code === lang)?.native}
+                </button>
+              </div>
+            </header>
+
+            {/* Offline Alert if offline */}
+            {!isOnline && (
+              <div className="bg-amber-500 text-amber-950 px-4 py-2 text-xs font-medium text-center">
+                {t.offlineMsg}
+              </div>
+            )}
+
+            {/* ================= HOME TAB ================= */}
+            {activeTab === 'home' && (
+              <main className="flex-1 p-4 sm:p-5 space-y-5 pb-24 overflow-y-auto">
+                {/* Personalized Greeting */}
+                <div>
+                  <p className="text-sm font-semibold text-[#2E7D32]">
+                    🙏 {t.greeting} {currentFarmer.name} 👋
+                  </p>
+                  <h2 className="text-2xl font-black text-[#26332A] tracking-tight">{t.howCanIHelp}</h2>
+                </div>
+
+                {/* Voice Card Centerpiece */}
+                <div
+                  onClick={() => {
+                    startListening((text) => {
+                      setRecognizedText(text);
+                      speak(t.understandingMsg);
+                    });
+                  }}
+                  className="rounded-3xl p-6 text-center cursor-pointer transition-all border-2 bg-gradient-to-b from-green-50 to-emerald-50 hover:to-green-100 border-[#2E7D32]/30 shadow-md active:scale-98 select-none"
+                >
+                  <div className="relative my-2 flex justify-center">
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl text-white transition-all shadow-lg bg-[#2E7D32] animate-wave-pulse">
+                      🎤
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-[#26332A] mt-3">{t.talkTitle}</h3>
+                  <p className="text-xs sm:text-sm text-[#66736A] mt-1 font-medium">{t.talkSub}</p>
+                  <p className="text-[11px] font-bold text-[#2E7D32] mt-2">{t.voiceLanguages}</p>
+                </div>
+
+                {/* Camera Card */}
+                <div
+                  onClick={() => {
+                    handlePhotoDiagnose();
+                  }}
+                  className="rounded-3xl p-5 bg-white border-2 border-[#2E7D32]/20 shadow-md hover:shadow-lg cursor-pointer flex items-center gap-4 transition-all active:scale-98"
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center text-3xl">
+                    📷
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-[#26332A]">{t.showProblem}</h3>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">Photo</span>
+                    </div>
+                    <p className="text-xs text-[#66736A] mt-0.5">{t.showSub}</p>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-base font-bold text-[#26332A]">{t.quickTitle}</h3>
+                    <span className="text-xs text-[#66736A] font-semibold">{t.fourServices}</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { icon: '🌱', title: t.crop, desc: t.cropDesc, tag: 'AI Vision', color: 'bg-emerald-500' },
+                      { icon: '🚜', title: t.tractor, desc: t.tractorDesc, tag: 'Booking', color: 'bg-amber-600' },
+                      { icon: '🌾', title: t.seeds, desc: t.seedsDesc, tag: 'Certified', color: 'bg-lime-600' },
+                      { icon: '🛡', title: t.insurance, desc: t.insuranceDesc, tag: 'PMFBY', color: 'bg-blue-600' },
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          if (item.tag === 'Booking') {
+                            handleBookTractor();
+                            alert(t.tractorBookedMsg);
+                          } else if (item.tag === 'Certified') {
+                            handleRequestSeed();
+                          } else if (item.tag === 'PMFBY') {
+                            handleInsuranceClaim();
+                          } else {
+                            handlePhotoDiagnose();
+                          }
+                        }}
+                        className="p-4 rounded-2xl bg-white border border-[#E3E0D8] shadow-sm hover:shadow-md cursor-pointer transition-all active:scale-95 flex flex-col justify-between min-h-[135px]"
+                      >
+                        <div className="flex justify-between items-start">
+                          <span className={`w-10 h-10 rounded-xl ${item.color} text-white flex items-center justify-center text-xl shadow-sm`}>
+                            {item.icon}
+                          </span>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">
+                            {item.tag}
+                          </span>
+                        </div>
+                        <div className="mt-2">
+                          <h4 className="font-bold text-sm text-[#26332A]">{item.title}</h4>
+                          <p className="text-[11px] text-[#66736A] mt-0.5 line-clamp-2">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Farmer-Specific Recent Requests */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-base font-bold text-[#26332A]">{t.recentRequests}</h3>
+                    <button onClick={() => setActiveTab('requests')} className="text-xs font-bold text-[#2E7D32]">{t.viewAll}</button>
+                  </div>
+                  {farmerRequests.length === 0 ? (
+                    <div className="p-4 rounded-2xl bg-white border text-center text-xs text-gray-500">
+                      {t.noRequests}
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {farmerRequests.slice(0, 2).map((r) => (
+                        <div key={r.id} className="p-3 bg-white rounded-2xl border shadow-sm flex items-center justify-between text-xs">
+                          <div>
+                            <span className="font-bold">{r.title}</span>
+                            <p className="text-gray-500">{r.date} • {r.farmerName}</p>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full font-bold bg-green-100 text-green-800">{r.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </main>
+            )}
+
+            {/* ================= REQUESTS TAB ================= */}
+            {activeTab === 'requests' && (
+              <main className="flex-1 p-5 pb-24 overflow-y-auto space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#26332A]">{t.reqNav}</h2>
+                    <p className="text-xs text-[#66736A]">
+                      👤 {currentFarmer.name} • 📱 {formatPhone(currentFarmer.phone)}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => { handleBookTractor(); alert(t.tractorBookedMsg); }}
+                    className="px-3 py-1.5 bg-[#2E7D32] text-white rounded-xl text-xs font-bold shadow active:scale-95"
+                  >
+                    {t.bookBtnShort}
+                  </button>
+                </div>
+
+                {farmerRequests.length === 0 ? (
+                  <div className="p-8 text-center bg-white rounded-3xl border border-dashed text-sm text-gray-500 space-y-2">
+                    <p>{t.noRequestsAccount}</p>
+                    <button onClick={() => { handleBookTractor(); alert(t.tractorBookedMsg); }} className="px-4 py-2 rounded-xl bg-[#2E7D32] text-white text-xs font-bold">
+                      {t.bookTractorBtn}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {farmerRequests.map((r) => (
+                      <div key={r.id} className="p-4 rounded-2xl bg-white border border-[#E3E0D8] shadow-sm flex items-center justify-between">
+                        <div>
+                          <h4 className="font-bold text-sm text-[#26332A]">{r.title}</h4>
+                          <p className="text-xs text-[#66736A] mt-0.5">{r.date} • ID: {r.id}</p>
+                          <p className="text-[11px] font-bold text-[#2E7D32] mt-0.5">{t.farmerLabel}: {r.farmerName} ({formatPhone(r.farmerPhone)})</p>
+                        </div>
+                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${r.color || 'bg-green-100 text-green-800'}`}>
+                          {r.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </main>
+            )}
+
+            {/* ================= PROFILE TAB ================= */}
+            {activeTab === 'profile' && (
+              <main className="flex-1 p-5 pb-24 overflow-y-auto space-y-4">
+                <h2 className="text-2xl font-bold text-[#26332A]">{t.meNav}</h2>
+
+                {/* Farmer Card */}
+                <div className="p-5 rounded-3xl bg-white border-2 border-[#2E7D32]/30 shadow-md flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center text-3xl">👨‍🌾</div>
+                  <div>
+                    <h3 className="font-bold text-xl text-[#26332A]">{currentFarmer.name}</h3>
+                    <p className="text-xs text-[#66736A] font-mono mt-0.5 font-bold">📱 {formatPhone(currentFarmer.phone)}</p>
+                    <p className="text-[11px] text-gray-500 font-mono mt-0.5">ID: #{currentFarmer.id}</p>
+                    <span className="inline-block mt-1 text-[11px] font-bold text-[#2E7D32] bg-green-50 px-2 py-0.5 rounded-full">
+                      🟢 {t.verifiedVoice}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Settings list */}
+                <div className="space-y-3">
+                  <div onClick={() => setIsModalOpen(true)} className="p-4 rounded-2xl bg-white border border-[#E3E0D8] cursor-pointer flex justify-between items-center">
+                    <div>
+                      <h4 className="font-bold text-sm">🌐 {t.changeLang}</h4>
+                      <p className="text-xs text-[#66736A]">{languages.find(l => l.code === lang)?.native} ({languages.find(l => l.code === lang)?.eng})</p>
+                    </div>
+                    <span className="text-[#2E7D32] font-bold">{t.change} →</span>
+                  </div>
+
+                  {/* Change Farmer / Logout */}
+                  <div
+                    onClick={() => setShowLogoutConfirm(true)}
+                    className="p-4 rounded-2xl bg-rose-50 border border-rose-200 cursor-pointer flex justify-between items-center text-rose-700"
+                  >
+                    <div>
+                      <h4 className="font-bold text-sm">🚪 {t.changeFarmer}</h4>
+                      <p className="text-xs text-rose-600/80">{t.changeFarmerSub}</p>
+                    </div>
+                    <span className="font-bold text-xs bg-rose-200 px-3 py-1 rounded-full">{t.change}</span>
+                  </div>
+                </div>
+              </main>
+            )}
+
+            {/* Bottom Nav */}
+            <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E3E0D8] shadow-lg">
+              <div className="max-w-lg mx-auto flex items-center justify-around py-2">
+                {[
+                  { id: 'home', icon: '🏠', label: t.homeNav },
+                  { id: 'requests', icon: '📋', label: t.reqNav },
+                  { id: 'profile', icon: '👤', label: t.meNav },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`flex flex-col items-center py-1 px-4 rounded-xl transition-all ${
+                      activeTab === item.id ? 'text-[#2E7D32] font-bold scale-105' : 'text-[#66736A]'
+                    }`}
+                  >
+                    <span className="text-xl">{item.icon}</span>
+                    <span className="text-xs mt-0.5">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            </nav>
+
+            {/* Change Farmer Modal */}
+            {showLogoutConfirm && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div className="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-700 mx-auto flex items-center justify-center text-2xl">
+                    🚪
+                  </div>
+                  <h3 className="font-bold text-lg text-[#26332A]">{t.changeFarmerTitle}</h3>
+                  <p className="text-xs text-gray-600">{t.changeFarmerConfirm}</p>
+                  <div className="grid grid-cols-2 gap-2 pt-2">
+                    <button onClick={() => setShowLogoutConfirm(false)} className="py-2.5 rounded-xl border text-xs font-bold">
+                      {t.cancelBtn}
+                    </button>
+                    <button onClick={handleLogout} className="py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold">
+                      {t.changeFarmerBtn}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Language Selector Modal */}
+            {isModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div className="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-3">
+                  <div className="flex justify-between items-center pb-2 border-b">
+                    <h3 className="font-bold text-lg text-[#26332A]">{t.changeLang}</h3>
+                    <button onClick={() => setIsModalOpen(false)} className="text-xl">✕</button>
+                  </div>
+                  {languages.map((l) => (
+                    <div
+                      key={l.code}
+                      onClick={() => { changeLanguage(l.code); speak(l.greeting); }}
+                      className={`p-3.5 rounded-2xl border-2 cursor-pointer flex justify-between items-center ${
+                        lang === l.code ? 'border-[#2E7D32] bg-green-50 font-bold' : 'border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>{l.flag}</span>
+                        <span>{l.native}</span>
+                        <span className="text-xs text-gray-500 font-normal">({l.eng})</span>
+                      </div>
+                      <button onClick={(e) => { e.stopPropagation(); speak(l.greeting); }} className="text-xs text-[#2E7D32] font-bold px-2 py-1 bg-white rounded-lg border">
+                        🔊
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="w-full py-3 rounded-xl bg-[#2E7D32] text-white font-bold text-sm shadow-md mt-2"
+                  >
+                    {t.doneBtn}
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

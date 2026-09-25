@@ -1,0 +1,101 @@
+[
+  {
+    "id": "documents_guidance",
+    "topic": "Useful Information and Documents",
+    "keywords": [
+      "documents",
+      "document",
+      "paper",
+      "papers",
+      "paperwork",
+      "records",
+      "what documents",
+      "which documents",
+      "passbook",
+      "land record",
+      "sowing certificate",
+      "aadhaar",
+      "identity proof",
+      "khasra",
+      "khata",
+      "ror",
+      "patta",
+      "pattadar",
+      "పత్రాలు",
+      "కాగితాలు",
+      "దస్తావేజులు",
+      "ఏ పత్రాలు కావాలి",
+      "పాస్‌బుక్",
+      "दस्तावेज",
+      "कागजात",
+      "कागजात क्या चाहिए",
+      "पासबुक",
+      "खतौनी"
+    ],
+    "guidance": "Exact document requirements may vary depending on the applicable scheme, state rules, or insurer. Having essential agricultural, identity, and banking records organized in advance helps facilitate verification during survey and claim processing.",
+    "information_to_collect": [
+      "Farmer identity proof (Aadhaar card or other government-approved photo ID)",
+      "Bank account details (account number, IFSC code, linked with Aadhaar/DBT)",
+      "Land ownership or tenancy proof (Pattadar Passbook, Record of Rights / RoR, or registered tenancy agreement)",
+      "Crop sowing details or village revenue certificate (Khasra / Girdawari entry)",
+      "Insurance premium deduction receipt, cover note, or bank statement entry"
+    ],
+    "useful_evidence": [
+      "Clear copies of land records showing survey numbers matching the damaged plot",
+      "Bank passbook front page copy showing clear IFSC and account holder name",
+      "Official sowing certificate issued by the village revenue officer or agriculture department, if requested",
+      "SMS or digital receipt confirming enrollment in the crop insurance scheme"
+    ],
+    "general_next_steps": [
+      "Ensure digital and physical copies of your identity, land, and bank documents are kept in a safe and accessible place",
+      "Verify that your active phone number is correctly linked with your bank account and Aadhaar",
+      "Confirm that the insured crop name and surveyed area match your actual cultivation on the ground"
+    ]
+  },
+  {
+    "id": "damage_evidence",
+    "topic": "Damage Evidence and Photographs",
+    "keywords": [
+      "evidence",
+      "photo",
+      "photos",
+      "photograph",
+      "photographs",
+      "proof",
+      "pictures",
+      "picture",
+      "camera",
+      "geo tag",
+      "geotag",
+      "geo-tag",
+      "photo proof",
+      "take photo",
+      "video",
+      "visual proof",
+      "ఫోటోలు",
+      "రుజువు",
+      "సాక్ష్యం",
+      "फोटो",
+      "तस्वीरें",
+      "सबूत",
+      "प्रमाण"
+    ],
+    "guidance": "High-quality visual evidence assists surveyors and agricultural committees in verifying the extent, nature, and timing of crop loss. Providing clear, geo-tagged photographs helps prevent ambiguity during official loss assessment.",
+    "information_to_collect": [
+      "Date, time, and exact field location coordinates when photographs are captured",
+      "Survey number or recognized plot boundary markers visible in or near the frame",
+      "Proportion of the entire field parcel captured across the series of photos"
+    ],
+    "useful_evidence": [
+      "Geo-tagged and timestamped photographs taken using a mobile device with GPS location enabled",
+      "Panoramic wide-angle view establishing field boundaries, access paths, and nearby fixed landmarks (well, pole, road)",
+      "Medium shots showing the transition between damaged and less-damaged sections",
+      "Close-up shots clearly revealing specific injuries (rotted roots, stripped pods, punctured leaves, lodged stems)"
+    ],
+    "general_next_steps": [
+      "Capture photographs in bright daylight as soon after the damage event as it is safe to do so",
+      "Retain original uncompressed photo files with camera metadata on your phone or memory card",
+      "Present the complete photographic sequence to the designated surveyor during the physical inspection visit"
+    ]
+  }
+]

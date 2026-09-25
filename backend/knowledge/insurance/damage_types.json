@@ -1,0 +1,261 @@
+[
+  {
+    "id": "heavy_rain",
+    "topic": "Heavy Rain Damage",
+    "keywords": [
+      "heavy rain",
+      "excess rain",
+      "heavy rainfall",
+      "rain damage",
+      "crop damaged by rain",
+      "incessant rain",
+      "continuous rain",
+      "torrential rain",
+      "downpour",
+      "rains damaged",
+      "excessive rain",
+      "వర్షానికి దెబ్బతింది",
+      "భారీ వర్షం",
+      "వర్షం నష్టం",
+      "भारी बारिश",
+      "बारिश से नुकसान",
+      "अत्यधिक वर्षा"
+    ],
+    "guidance": "Excess rainfall can lead to crop lodging, flower/grain shedding, or root suffocation. Timely intimation to your local agricultural office or insurance representative may be required depending on the applicable scheme or insurer rules.",
+    "information_to_collect": [
+      "Approximate date, start time, and duration of the heavy rainfall event",
+      "Affected crop type, variety, and stage of growth (e.g. flowering, grain filling, maturity)",
+      "Estimated land area affected in acres or hectares",
+      "Visible physical symptoms (e.g. lodged stems, waterlogging, washed away topsoil)"
+    ],
+    "useful_evidence": [
+      "Clear daylight photographs showing the extent of flattened or water-damaged crops",
+      "Wide-angle panoramic field photograph showing field boundaries and standing water",
+      "Local weather report or newspaper clipping noting the excessive precipitation event, if available"
+    ],
+    "general_next_steps": [
+      "Check whether safe surface drainage can be opened without disturbing root systems further",
+      "Record the incident date and notify your village agriculture officer (AEO/VAA) or insurer helpline as early as possible",
+      "Keep land records (Pattadar Passbook / RoR) and insurance premium deduction receipt ready for inspection"
+    ]
+  },
+  {
+    "id": "flood_waterlogging",
+    "topic": "Flood and Waterlogging",
+    "keywords": [
+      "flood",
+      "waterlogging",
+      "waterlogged",
+      "water logged",
+      "flooding",
+      "submerged",
+      "submergence",
+      "standing water",
+      "inundation",
+      "water entered field",
+      "field submerged",
+      "paddy submerged",
+      "canal breach",
+      "overflow",
+      "వరద",
+      "నీరు చేరింది",
+      "మునిగిపోయింది",
+      "పొలంలో నీళ్లు",
+      "बाढ़",
+      "जलभराव",
+      "खेत डूब गया",
+      "पानी भर गया"
+    ],
+    "guidance": "Submergence and prolonged standing water deprive roots of oxygen and can cause extensive root rot or silt suffocation. In many notified schemes, localized inundation post-sowing may be considered for assessment, subject to official surveyor verification.",
+    "information_to_collect": [
+      "Date and approximate time when floodwater or runoff entered the field parcel",
+      "Depth of standing water and continuous number of days the crop has remained submerged",
+      "Crop type, sown acreage, and approximate percentage of area submerged",
+      "Source of inundation (e.g. river overflow, canal breach, heavy localized surface runoff)"
+    ],
+    "useful_evidence": [
+      "Close-up photographs of submerged foliage, silt deposition, or rotting lower stems",
+      "Panoramic shots establishing recognizable landmarks (electric pole, well, access road) for location verification",
+      "Dated photographs taken on consecutive days showing duration of water stagnation"
+    ],
+    "general_next_steps": [
+      "Prioritize personal and family safety before entering flooded agricultural areas",
+      "Intimate your local agriculture office, Gram Panchayat, or insurer toll-free channel promptly",
+      "Do not plow under or prematurely clear the damaged crop until official inspection is completed or advised"
+    ]
+  },
+  {
+    "id": "drought",
+    "topic": "Drought and Prolonged Dry Spell",
+    "keywords": [
+      "drought",
+      "no rain",
+      "dry spell",
+      "drying",
+      "crop drying",
+      "scanty rainfall",
+      "deficit rainfall",
+      "water shortage",
+      "monsoon failure",
+      "withered",
+      "wilting",
+      "dry weather",
+      "వర్షాలు లేక",
+      "ఎండిపోతోంది",
+      "కరువు",
+      "నీరు లేక",
+      "सूखा",
+      "बारिश नहीं हुई",
+      "फसल सूख रही है",
+      "पानी की कमी"
+    ],
+    "guidance": "Prolonged dry spells during critical growth stages cause moisture stress, stunted growth, and permanent wilting. Insurance assistance for widespread drought is generally evaluated at the area unit level based on seasonal rainfall indices or crop cutting experiments, depending on scheme notifications.",
+    "information_to_collect": [
+      "Duration of the dry spell (number of continuous weeks without rainfall or irrigation)",
+      "Current growth stage of the crop (vegetative, flowering, pod/grain development)",
+      "Soil type and primary irrigation status (rainfed, borewell, canal availability)",
+      "Observed symptoms (permanent wilting, leaf scorching, stunted height, failure to flower)"
+    ],
+    "useful_evidence": [
+      "Photographs showing severe soil cracking and withered or scorched plants",
+      "Comparison photos of affected field sections versus any irrigated reference patch",
+      "Local rain-gauge, mandal, or block-level deficit rainfall advisories if available"
+    ],
+    "general_next_steps": [
+      "Adopt moisture conservation practices (mulching, light hoeing) where feasible",
+      "Check whether your mandal or block is officially notified as drought-affected by the state government",
+      "Consult your village agriculture assistant or local cooperative society regarding area-wide assessment schedules"
+    ]
+  },
+  {
+    "id": "hailstorm",
+    "topic": "Hailstorm Damage",
+    "keywords": [
+      "hail",
+      "hailstorm",
+      "hail stones",
+      "hailstones",
+      "ice stones",
+      "hail destroyed",
+      "hail impact",
+      "stones fell",
+      "వడగళ్ళు",
+      "వడగండ్ల వాన",
+      "వడగండ్ల నష్టం",
+      "ओलावृष्टि",
+      "ओले पड़े",
+      "ओला गिरा",
+      "ओलों से नुकसान"
+    ],
+    "guidance": "Hailstones cause sudden, severe mechanical injury including shredded leaves, broken stems, bruised fruits, and fallen flowers. Hailstorm is widely treated as a localized calamity under major crop insurance guidelines, requiring prompt notification.",
+    "information_to_collect": [
+      "Exact date and time of the hailstorm event",
+      "Duration of the hail event and approximate size of hailstones (e.g. marble-sized, lemon-sized)",
+      "Specific crop parts damaged (foliage, branches, flowers, developing fruits/pods)",
+      "Estimated percentage of total crop yield lost across the survey number"
+    ],
+    "useful_evidence": [
+      "Immediate photographs showing hailstones accumulated on the field surface before melting",
+      "Close-up photographs of punctured leaves, broken stalks, bruised fruits, or stripped stems",
+      "A reference object (such as a coin or hand) placed next to hailstones or leaf punctures"
+    ],
+    "general_next_steps": [
+      "Capture photographs as quickly as possible before hailstones melt and wound margins discolor",
+      "Notify your local agriculture officer, insurance company helpline, or bank without delay",
+      "Consult an agriculture extension officer for prophylactic sprays to prevent secondary fungal entry through physical wounds"
+    ]
+  },
+  {
+    "id": "storm_wind",
+    "topic": "Storm and Strong Wind Damage",
+    "keywords": [
+      "storm",
+      "cyclone",
+      "cyclonic",
+      "strong wind",
+      "high wind",
+      "high winds",
+      "gale",
+      "wind damaged",
+      "plants lodged",
+      "lodging",
+      "uprooted",
+      "blown down",
+      "squall",
+      "గాలులు",
+      "తుఫాను",
+      "గాలివాన",
+      "నేలకొరిగింది",
+      "तूफान",
+      "तेज हवा",
+      "आंधी",
+      "फसल गिर गई",
+      "चक्रवात"
+    ],
+    "guidance": "High-velocity winds and cyclonic squalls can uproot standing crops, cause severe lodging (flattening), or snap fruit-bearing branches. Eligibility and coverage for localized wind damage depend on local scheme notifications and event classification.",
+    "information_to_collect": [
+      "Date, time, and duration of the storm or gale-force wind event",
+      "Crop height, growth stage, and whether the crop is completely lodged or tilted",
+      "Extent of uprooting versus stem bending or breakage",
+      "Whether the windstorm was accompanied by intense rainfall"
+    ],
+    "useful_evidence": [
+      "Photographs capturing the direction and pattern of lodged plant rows across the plot",
+      "Close-up photos of snapped stems, torn canopies, or exposed roots",
+      "Wide landscape view showing the scale of the damage across adjoining farm boundaries"
+    ],
+    "general_next_steps": [
+      "Avoid attempting to mechanically straighten severely lodged mature plants without expert advice, as brittle stems may snap",
+      "Report the incident to the village revenue officer, agriculture extension officer, or insurer channel",
+      "Prepare your land survey and khata details in advance for the surveyor's joint field inspection"
+    ]
+  },
+  {
+    "id": "pest_disease",
+    "topic": "Pest Attack and Crop Disease Damage",
+    "keywords": [
+      "pest",
+      "pests",
+      "insect",
+      "insects",
+      "disease",
+      "pest attack",
+      "fungal attack",
+      "fungal disease",
+      "blight",
+      "borer",
+      "infestation",
+      "bugs",
+      "worms",
+      "virus",
+      "rotting",
+      "పురుగులు",
+      "తెగుళ్ళు",
+      "కీటకాలు",
+      "పురుగుల దాడి",
+      "कीट",
+      "रोग",
+      "कीड़े",
+      "इल्ली",
+      "फफूंद",
+      "कीट प्रकोप"
+    ],
+    "guidance": "Severe pest outbreaks and disease epidemics can cause widespread yield reduction. Coverage for pest and disease attacks is typically evaluated at the area unit level based on seasonal crop cutting experiments, though specific provisions can vary across schemes.",
+    "information_to_collect": [
+      "Type of pest or symptom observed (e.g. brown planthopper, stem borer holes, fungal blight, viral curling)",
+      "Approximate date when the infestation first became noticeable",
+      "Previous plant protection measures, spray dates, and chemicals applied",
+      "Proportion of total crop area exhibiting severe damage"
+    ],
+    "useful_evidence": [
+      "Clear close-up photos of active insect pests, larvae, egg masses, or distinct foliar lesions",
+      "Photographs showing both healthy and severely affected patches side by side",
+      "Purchase receipts for recommended agrochemical inputs applied, if available"
+    ],
+    "general_next_steps": [
+      "Consult the local Krishi Vigyan Kendra (KVK) or Agriculture Extension Officer immediately for management advisory",
+      "Check whether an area-wide epidemic notification has been issued for your mandal or district",
+      "Keep your sowing verification and input purchase documentation organized for potential inquiry"
+    ]
+  }
+]
